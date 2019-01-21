@@ -6,6 +6,7 @@ import pandas as pd
 from datetime import datetime
 from time import sleep
 from gmailhelper import get_credentials, create_HTML_message, send_message
+
 #from gmailhelper import SCOPES
 
 url_daily = 'http://namex.org/ru/auction/data/history'#daily data
