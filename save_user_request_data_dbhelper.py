@@ -36,15 +36,19 @@ def record_request_data(conn, user_id, user_name, request_date, user_request):
     """
     """
     c = conn.cursor()
-    c.execute("INSERT INTO user_data  VALUES(?, ?, ?, ?, ?)", 
+    c.execute("INSERT INTO user_data  VALUES(null, ?, ?, ?, ?)", 
               (user_id, user_name, request_date, user_request))
     conn.commit()
-    return 
+    return c.lastrowid
 # %%
 database_file = 'namex_requests.sqlite'
 
 # %%
 if __name__ == '__main__':
+    user_id = 1
+    user_name = 'test1'
+    request_date = 100
+    user_request = 'text1'
     conn = create_connection_to_database(database_file)
     sql_create_user_requests_table = """ CREATE TABLE IF NOT EXISTS user_data 
                                   (request_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -59,9 +63,10 @@ if __name__ == '__main__':
 # %%
     conn = create_connection_to_database(database_file)
     cursor = conn.cursor()    
+    record_request_data(conn, user_id, user_name, request_date, user_request)
     tables = cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
     print(tables.fetchall())
-    content = cursor.execute("SELECT * FROM items")
+    content = cursor.execute("SELECT * FROM user_data")
     print(content.fetchall())
     conn.close()
     
