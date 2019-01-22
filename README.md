@@ -6,4 +6,5 @@ This bot will contain such main parts as:
 3. Database of user requests.
 4. Code to process requests.
 4. Code to keep DB_prices_history updated.
+Just added a test string
 
