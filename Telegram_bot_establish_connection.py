@@ -17,12 +17,15 @@ import datetime
 #from dateutil.parser import parse
 import pandas as pd
 from namex_sugar_contract_get_price_on_date import get_last_date, get_data_for_day, check_day_requested
+from save_user_request_data_dbhelper import record_to_database
 #from Telegram_bot_processing_user_commands import check_whether_is_date
 
 # %% variables to assign values to
 TOKEN = '458061552:AAF725jrssawGE-ff8ZGIIpyLZXlHEIT4Ok'
 URL = f'https://api.telegram.org/bot{TOKEN}/'
 file_with_history = r'namex_FSG_sugar_price_history.csv'
+price_history = pd.read_csv(file_with_history)
+price_history.date = pd.to_datetime(price_history.date).dt.date
 # %%
 def get_url(url, params=None):
     if not params:
@@ -96,8 +99,6 @@ var_responses = {'simple bot sends you sugar price': 'It is a simple bot which c
                  }    
 # %%
 # read price_history from csv-file to dataframe
-price_history = pd.read_csv(file_with_history)
-price_history.date = pd.to_datetime(price_history.date).dt.date
 def check_whether_is_date(user_request):
     try:
         date_requested = datetime.datetime.strptime(user_request, '%Y-%m-%d').date()
@@ -108,6 +109,8 @@ def check_whether_is_date(user_request):
     except OverflowError:
         message = 'Probably you input wrong date, check the date'   
         return ('message', message)
+    
+
 # %%
 def handle_user_request(updates):
     '''
@@ -150,10 +153,21 @@ def handle_user_request(updates):
 def main():
     last_update_id = None
     while True:
-        updates = get_updates(last_update_id)
-        if len(updates['result']) > 0:
+        updates = get_updates(last_update_id)        
+        if len(updates['result']) > 0:#there is a new request           
+            price_history = pd.read_csv(file_with_history) #get updates of price history
+            price_history.date = pd.to_datetime(price_history.date).dt.date
             last_update_id = get_last_update_id(updates) + 1
             handle_user_request(updates)
+            # write user_requests to database
+            database_file = 'telegram_bot_namex_requests_database.sqlite'
+            for update in updates['result']:
+                request_date = update['message']['date']
+                user_id = update['message']['chat']['id']
+                user_name = update['message']['chat']['username']
+                user_request = update['message']['text']
+                record_to_database(database_file, user_id, user_name, request_date, user_request)
+                
         time.sleep(2)
 
 # %%

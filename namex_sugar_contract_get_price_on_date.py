@@ -19,7 +19,7 @@ import pandas as pd
 file_with_history = r'namex_FSG_sugar_price_history.csv'
 price_history = pd.read_csv(file_with_history)
 price_history.date = pd.to_datetime(price_history.date).dt.date
-print(price_history.head())
+#print(price_history.head())
 # %%
 def get_data_for_day(price_history, day_look_for):
     '''
@@ -35,7 +35,7 @@ def get_last_date(price_history):
     Returns last available date in price_history
     '''
     return price_history['date'].max() # price_history['date'].max()
-print(get_last_date(price_history))
+#print(get_last_date(price_history))
 # %%
 day_look_for = None
 message = ''

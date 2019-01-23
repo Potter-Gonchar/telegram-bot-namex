@@ -37,25 +37,25 @@ def get_json_from_url(url):
     js = json.loads(content)
     return js
 
-def get_updates(offset=None):
-    url = URL + 'getUpdates?timeout=100'
+def get_updateates(offset=None):
+    url = URL + 'getupdateates?timeout=100'
     if offset:
         url += f'&offset={offset}'
     js = get_json_from_url(url)
     return js
 
-def get_last_chat_id_and_text(updates):
-    num_updates = len(updates["result"])
-    last_update = num_updates - 1
-    text = updates["result"][last_update]["message"]["text"]
-    chat_id = updates["result"][last_update]["message"]["chat"]["id"]
+def get_last_chat_id_and_text(updateates):
+    num_updateates = len(updateates["result"])
+    last_updateate = num_updateates - 1
+    text = updateates["result"][last_updateate]["message"]["text"]
+    chat_id = updateates["result"][last_updateate]["message"]["chat"]["id"]
     return (text, chat_id)
 
-def get_last_update_id(updates):
-    update_ids = []
-    for update in updates['result']:
-        update_ids.append(int(update['update_id']))
-    return max(update_ids)
+def get_last_updateate_id(updateates):
+    updateate_ids = []
+    for updateate in updateates['result']:
+        updateate_ids.append(int(updateate['updateate_id']))
+    return max(updateate_ids)
 
 def send_message_telegram(message, chat_id, params=None, reply_markup=None):
     message = message
@@ -65,18 +65,17 @@ def send_message_telegram(message, chat_id, params=None, reply_markup=None):
     get_url(url, params)
 
 # %% get data_to_save = [user_id, user_name, request_date, user_request ]
-updates = get_updates(offset=None)
-print(updates)
+updateates = get_updateates(offset=None)
+print(updateates)
 # %% save user ID to DataBase
 import sqlite3
 db_test = 'user_data_base.sqlite'
 conn = sqlite3.connect(db_test)
-for upd in updates['result']:
-    request_date = upd['message']['date']
-    user_id = upd['message']['chat']['id']
-    user_name = upd['message']['chat']['username']
-    request_date = upd['message']['date']
-    user_request = upd['message']['text']
+for update in updateates['result']:
+    request_date = update['message']['date']
+    user_id = update['message']['chat']['id']
+    user_name = update['message']['chat']['username']
+    user_request = update['message']['text']
     c = conn.cursor()
     c.execute("""CREATE TABLE IF NOT EXISTS user_data 
               (request_id INTEGER PRIMARY KEY AUTOINCREMENT,

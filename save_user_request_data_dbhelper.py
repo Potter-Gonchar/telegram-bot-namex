@@ -40,15 +40,10 @@ def record_request_data(conn, user_id, user_name, request_date, user_request):
               (user_id, user_name, request_date, user_request))
     conn.commit()
     return c.lastrowid
-# %%
-database_file = 'namex_requests.sqlite'
 
-# %%
-if __name__ == '__main__':
-    user_id = 1
-    user_name = 'test1'
-    request_date = 100
-    user_request = 'text1'
+def record_to_database(database_file, user_id, user_name, request_date, user_request):
+    """
+    """
     conn = create_connection_to_database(database_file)
     sql_create_user_requests_table = """ CREATE TABLE IF NOT EXISTS user_data 
                                   (request_id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -58,8 +53,30 @@ if __name__ == '__main__':
                                    user_request TEXT);
                                     """
     create_table(conn, sql_create_user_requests_table)
-    
-    conn.close()
+    record_request_data(conn, user_id, user_name, request_date, user_request)
+    conn.close()    
+    pass
+# %%
+database_file = 'namex_requests.sqlite'
+
+# %%
+if __name__ == '__main__':
+    user_id = 10
+    user_name = 'test_21'
+    request_date = 200
+    user_request = 'text_21'
+    record_to_database(database_file, user_id, user_name, request_date, user_request)
+#    conn = create_connection_to_database(database_file)
+#    sql_create_user_requests_table = """ CREATE TABLE IF NOT EXISTS user_data 
+#                                  (request_id INTEGER PRIMARY KEY AUTOINCREMENT,
+#                                  user_id INTEGER, 
+#                                  user_name TEXT, 
+#                                   request_date INTEGER, 
+#                                   user_request TEXT);
+#                                    """
+#    create_table(conn, sql_create_user_requests_table)
+#    
+#    conn.close()
 # %%
     conn = create_connection_to_database(database_file)
     cursor = conn.cursor()    
