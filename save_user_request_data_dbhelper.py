@@ -85,6 +85,7 @@ if __name__ == '__main__':
     print(tables.fetchall())
     content = cursor.execute("SELECT * FROM user_data")
     print(content.fetchall())
+    cursor.close()
     conn.close()
     
     pass
