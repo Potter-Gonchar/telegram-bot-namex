@@ -4,9 +4,7 @@
 1.1. Establish channel with Telegram to get informed if request (requests) comes.
 1.1.1. Try to use Long Polling
 1.2. Pass the request as a str variable to the next piece of code
-
 2. Get variable message from a relevant module and send this to the user.
-
 tutorial https://www.codementor.io/garethdwyer/building-a-telegram-bot-using-python-part-1-goi5fncay
 https://www.codementor.io/garethdwyer/building-a-chatbot-using-telegram-and-python-part-2-sqlite-databse-backend-m7o96jger
 """
@@ -93,6 +91,29 @@ def send_message(message, chat_id, reply_markup=None):
                 url += '&reply_markup={}'.format(reply_markup)
             get_url(url)
 
+def send_HTML_message_telegram(html_message, chat_id, URL, reply_markup=None):
+    """Send a very simple HTML-message via Telegram API
+    Args:
+        html_message: str, e.g. "http://caxap.ru/#blog"
+        chat_id: int, relevant chat_id
+        URL:  path to relevant Telegram API, TOKEN has to be included
+        reply_markup: keyboard if needed
+    Returns:
+        Response object
+            200 if success
+            or error code if no success
+    """
+    url = URL + "sendMessage"
+    params = {"chat_id": chat_id,
+          "text": html_message,
+          "parse_mode": None, #str, if needed "HTML" or "Markdown"
+          "reply_markup": None}
+    try:
+        telegram = requests.get(url, params=params)
+        return telegram
+    except Exception as e:
+        return 'Telegram error is {}'.format(e)
+
 var_responses = {'simple bot sends you sugar price': 'It is a simple bot which can send you sugar price', # key on custom keyboard
                  'last': 'call a function that returns last available date in history', # key on custom keyboard
                  'input exact date': 'send to user a form to enter exact date in acceptable format', # key on custom keyboard
@@ -120,6 +141,7 @@ def handle_user_request(updates):
 #        print(update['message']['text'])
         user_request = update['message']['text']
         print(user_request, type(user_request))
+        ask_help = False
         try:
             if user_request == 'последняя доступная дата':
 #                print(f'user_request is {user_request}')
@@ -127,7 +149,9 @@ def handle_user_request(updates):
                 message = get_data_for_day(price_history, date_look_for)
                 print(message)
             elif user_request == 'help':
-                message = r'https://telegra.ph/Bot-s-istoriej-cen-na-sahar-na-namexorg-01-09'
+#                message = 'https://telegra.ph/Bot-s-istoriej-cen-na-sahar-na-namexorg-01-09'
+                message = "http://caxap.ru/#blog"
+                ask_help = True
             elif not user_request.isalpha():
 #                print('check whether is DATE')
                 check = check_whether_is_date(user_request)
@@ -146,6 +170,8 @@ def handle_user_request(updates):
             else: 
                 message = 'I do NOT understand, check your request and try again'
             chat = update['message']['chat']['id']
+            if ask_help == True:
+                send_HTML_message_telegram(message, chat, URL, reply_markup=None)
             send_message(message, chat, reply_markup)
         except Exception as e:
             print(e)
