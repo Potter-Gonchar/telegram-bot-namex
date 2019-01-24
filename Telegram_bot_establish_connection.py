@@ -151,7 +151,7 @@ def handle_user_request(updates):
             elif user_request == "подписка на e-mail рассылку":
                 message = """Введите свой e-mail. Данные обновляются по рабочим дням в 20:45 Moscow Time. 
                             Отправив e-mail, вы выражаете согласие на получение рассылки и обработку ваших персональных данных."""
-            elif "@" and "." in user_request:  #it's supposed to be e-mail address (maybe)
+            elif "@" in user_request and "." in user_request:  #it's supposed to be e-mail address (maybe)
                 message = "Subscribed, congratulations!"                
             elif not user_request.isalpha():
 #                print('check whether is DATE')

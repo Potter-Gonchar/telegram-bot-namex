@@ -29,3 +29,7 @@ def check_whether_is_email(user_request):
     if "@" and "." in user_request:
         is_email = True        
     return is_email
+
+for r in ['a@cax.ru', 'tets', 'ad@.', 'kra.com' ]:
+    if '@' in r and '.' in r: print('{} is mail'.format(r))
+    else: print('{} does NOT mail'.format(r))
