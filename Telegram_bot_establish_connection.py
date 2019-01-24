@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-1. Get request from an user. Meaning:
-1.1. Establish channel with Telegram to get informed if request (requests) comes.
-1.1.1. Try to use Long Polling
-1.2. Pass the request as a str variable to the next piece of code
-2. Get variable message from a relevant module and send this to the user.
 tutorial https://www.codementor.io/garethdwyer/building-a-telegram-bot-using-python-part-1-goi5fncay
 https://www.codementor.io/garethdwyer/building-a-chatbot-using-telegram-and-python-part-2-sqlite-databse-backend-m7o96jger
 """
@@ -16,8 +11,7 @@ import datetime
 import pandas as pd
 from namex_sugar_contract_get_price_on_date import get_last_date, get_data_for_day, check_day_requested
 from save_user_request_data_dbhelper import record_to_database
-#from Telegram_bot_processing_user_commands import check_whether_is_date
-
+#from Telegram_bot_processing_user_commands import check_whether_is_email
 # %% variables to assign values to
 TOKEN = '458061552:AAF725jrssawGE-ff8ZGIIpyLZXlHEIT4Ok'
 URL = f'https://api.telegram.org/bot{TOKEN}/'
@@ -154,6 +148,11 @@ def handle_user_request(updates):
 #                message = 'https://telegra.ph/Bot-s-istoriej-cen-na-sahar-na-namexorg-01-09'
                 message = "http://caxap.ru/#blog"
                 ask_help = True
+            elif user_request == "подписка на e-mail рассылку":
+                message = """Введите свой e-mail. Данные обновляются по рабочим дням в 20:45 Moscow Time. 
+                            Отправив e-mail, вы выражаете согласие на получение рассылки и обработку ваших персональных данных."""
+            elif "@" and "." in user_request:  #it's supposed to be e-mail address (maybe)
+                message = "Subscribed, congratulations!"                
             elif not user_request.isalpha():
 #                print('check whether is DATE')
                 check = check_whether_is_date(user_request)
@@ -198,5 +197,5 @@ def main():
 
 # %%
 if __name__ == '__main__':
-    reply_markup = build_keyboard(items = [['help', 'последняя доступная дата'], ])
+    reply_markup = build_keyboard(items = [['help', 'последняя доступная дата'], ['подписка на e-mail рассылку']])
     main()

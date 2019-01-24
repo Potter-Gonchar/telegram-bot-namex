@@ -41,6 +41,18 @@ def record_request_data(conn, user_id, user_name, request_date, user_request):
     conn.commit()
     return c.lastrowid
 
+def add_column_to_table(table_name, column_name):
+    """add a new column to a given table, type TEXT
+    parameters:
+        table_name: str, table to add a column to
+        column_name: str, name of column to be added
+    """
+    command = "ALTER TABLE {} ADD COLUMN {} TEXT;".format(table_name, column_name)
+    c = conn.cursor()
+    c.execute(command)
+    conn.commit()
+    
+
 def record_to_database(database_file, user_id, user_name, request_date, user_request):
     """
     """
@@ -55,9 +67,12 @@ def record_to_database(database_file, user_id, user_name, request_date, user_req
     create_table(conn, sql_create_user_requests_table)
     record_request_data(conn, user_id, user_name, request_date, user_request)
     conn.close()
+    
+
+
 # %%
 database_file = 'namex_requests.sqlite'
-
+conn = create_connection_to_database(database_file)
 # %%
 if __name__ == '__main__':
     user_id = 10
@@ -65,25 +80,25 @@ if __name__ == '__main__':
     request_date = 200
     user_request = 'text_21'
     record_to_database(database_file, user_id, user_name, request_date, user_request)
-#    conn = create_connection_to_database(database_file)
-#    sql_create_user_requests_table = """ CREATE TABLE IF NOT EXISTS user_data 
-#                                  (request_id INTEGER PRIMARY KEY AUTOINCREMENT,
-#                                  user_id INTEGER, 
-#                                  user_name TEXT, 
-#                                   request_date INTEGER, 
-#                                   user_request TEXT);
-#                                    """
-#    create_table(conn, sql_create_user_requests_table)
-#    
-#    conn.close()
+    
+    sql_create_user_requests_table = """ CREATE TABLE IF NOT EXISTS user_data 
+                                  (request_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                  user_id INTEGER, 
+                                  user_name TEXT, 
+                                   request_date INTEGER, 
+                                   user_request TEXT);
+                                    """
+    create_table(conn, sql_create_user_requests_table)
+    
+    conn.close()
 # %%
     conn = create_connection_to_database(database_file)
-    cursor = conn.cursor()    
-    record_request_data(conn, user_id, user_name, request_date, user_request)
-    tables = cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
-    print(tables.fetchall())
-    content = cursor.execute("SELECT * FROM user_data")
-    print(content.fetchall())
+    cursor = conn.cursor() 
+#    cursor.execute("SELECT name FROM sqlite_master WHERE type='table';")
+#    print(cursor.fetchall())
+    table_name = "user_data"
+    column_name = "e_mail"
+    add_column_to_table(table_name, column_name)
     cursor.close()
     conn.close()
     
