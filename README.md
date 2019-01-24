@@ -6,5 +6,7 @@ This bot will contain such main parts as:
 3. Database of user requests.
 4. Code to process requests.
 4. Code to keep DB_prices_history updated.
-Just added a test string
 
+2019-01-24
+	How to handle with subscribtion to mailing list
+Filter database table <user_data> column <user_request> by pattern <*@*.*> to choose e-mail addresses. Or use any more sofisticated took to pick up e-mail address.
