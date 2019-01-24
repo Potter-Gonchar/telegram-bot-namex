@@ -55,7 +55,7 @@ def record_to_database(database_file, user_id, user_name, request_date, user_req
     create_table(conn, sql_create_user_requests_table)
     record_request_data(conn, user_id, user_name, request_date, user_request)
     conn.close()    
-    pass
+    c.close()
 # %%
 database_file = 'namex_requests.sqlite'
 
@@ -85,6 +85,7 @@ if __name__ == '__main__':
     print(tables.fetchall())
     content = cursor.execute("SELECT * FROM user_data")
     print(content.fetchall())
+    cursor.close()
     conn.close()
     
     pass
