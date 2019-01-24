@@ -139,6 +139,8 @@ def handle_user_request(updates):
     '''
     for update in updates['result']:
 #        print(update['message']['text'])
+        price_history = pd.read_csv(file_with_history) #get updates of price history
+        price_history.date = pd.to_datetime(price_history.date).dt.date
         user_request = update['message']['text']
         print(user_request, type(user_request))
         ask_help = False
@@ -181,8 +183,6 @@ def main():
     while True:
         updates = get_updates(last_update_id)        
         if len(updates['result']) > 0:#there is a new request           
-            price_history = pd.read_csv(file_with_history) #get updates of price history
-            price_history.date = pd.to_datetime(price_history.date).dt.date
             last_update_id = get_last_update_id(updates) + 1
             handle_user_request(updates)
             # write user_requests to database

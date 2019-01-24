@@ -1332,3 +1332,6 @@ date,url,contract,current_price,average_price,number_deals,volume_MT,amount_RUB
 2017-03-09,http://fs.moex.com/files/14542,FSGCFO,31700.0,0.0,0.0,0.0,0.0
 2017-03-07,http://fs.moex.com/files/14541,FSGCFO,31700.0,31700.0,1.0,20.0,634000.0
 2017-03-06,http://fs.moex.com/files/14540,FSGCFO,31400.0,31400.0,1.0,100.0,3140000.0
+2019-01-23,https://fs.moex.com/files/18353/30218,FSGYFO,36498.0,,0.0,0.0,0.0
+2019-01-23,https://fs.moex.com/files/18353/30218,FSGCFO,36399.0,36022.92307692308,3.0,260.0,9365960.0
+2019-01-23,https://fs.moex.com/files/18353/30218,FSGPFO,36498.0,,0.0,0.0,0.0

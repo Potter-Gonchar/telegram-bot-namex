@@ -5,7 +5,7 @@ import os
 import pandas as pd
 from datetime import datetime
 from time import sleep
-from gmailhelper import get_credentials, create_HTML_message, send_message
+#from gmailhelper import get_credentials, create_HTML_message, send_message
 
 #from gmailhelper import SCOPES
 
@@ -16,7 +16,7 @@ file_to_keep_processed_data = r'namex_FSG_sugar_price_history.csv'
 sender = "sergagronova@gmail.com"
 recipients_emails = [ "olesya.ivanova@solods.ru", "sergey.solod@solods.ru"]
 subject = "SUGAR contract daily update"
-service = get_credentials()
+#service = get_credentials()
 # %%
 def main(url_daily='http://namex.org/ru/auction/data/history', file_to_keep_processed_data='namex_FSG_sugar_price_history.csv'):
     '''
@@ -177,13 +177,13 @@ def main(url_daily='http://namex.org/ru/auction/data/history', file_to_keep_proc
             df['average_price'] = df['average_price'].fillna(0)
             html_object = pd.DataFrame.to_html(df, index=False, na_rep="0")
             print("sending updates via email")
-            for recipient in recipients_emails:
-                try:
-                    message_text = ''
-                    body_email = create_HTML_message(sender, recipient, subject, html_object, message_text)
-                    send_message(service, "me", body_email)
-                except Exception as e:
-                    print("Gmail formatted letter error is {}".format(e))            
+#            for recipient in recipients_emails:
+#                try:
+#                    message_text = ''
+#                    body_email = create_HTML_message(sender, recipient, subject, html_object, message_text)
+#                    send_message(service, "me", body_email)
+#                except Exception as e:
+#                    print("Gmail formatted letter error is {}".format(e))            
         else:
             print('NO new data')
     
